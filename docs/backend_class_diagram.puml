@@ -1,0 +1,908 @@
+@startuml Hotel_Reservation_Backend_Class_Diagram
+
+' ==============================================================================
+' Styling & Configuration
+' ==============================================================================
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+
+skinparam package {
+    BackgroundColor #F8FAFC
+    BorderColor #64748B
+    FontColor #0F172A
+    FontStyle bold
+    FontSize 14
+}
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #334155
+    HeaderBackgroundColor #E2E8F0
+    FontColor #0F172A
+    FontSize 11
+    AttributeFontSize 10
+    AttributeFontColor #334155
+    AttributeIconSize 0
+}
+
+' ==============================================================================
+' Package: model (Domain Entities)
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.model" as model {
+
+    abstract class BaseEntity {
+        - id: Long
+        - createdAt: LocalDateTime
+        + {abstract} validate(): void
+        + getId(): Long
+        + setId(id: Long): void
+        + getCreatedAt(): LocalDateTime
+        + setCreatedAt(createdAt: LocalDateTime): void
+    }
+
+    class Room {
+        - name: String
+        - slug: String
+        - type: String
+        - pricePerNight: Double
+        - currency: String
+        - rating: Double
+        - reviewCount: Integer
+        - location: String
+        - maxGuests: Integer
+        - beds: String
+        - baths: Integer
+        - sizeSqFt: Integer
+        - tag: String
+        - description: String
+        - detailedDescription: String
+        - cancellationPolicy: String
+        - bedType: String
+        - view: String
+        - featured: Boolean
+        - popular: Boolean
+        - status: String
+        - totalRooms: Integer
+        - baseRoomNumber: Integer
+        - occupiedRooms: Integer
+        - availableRooms: Integer
+        - roomNumbers: List<String>
+        - occupiedRoomNumbers: List<String>
+        - availableRoomNumbers: List<String>
+        - amenities: List<String>
+        - images: List<String>
+        + Room()
+        + Room(name: String, slug: String, type: String, pricePerNight: Double, rating: Double, reviewCount: Integer, maxGuests: Integer, beds: String, baths: Integer, sizeSqFt: Integer, tag: String, description: String, detailedDescription: String, bedType: String, view: String, featured: Boolean, popular: Boolean, amenities: List<String>, images: List<String>)
+        + validate(): void
+        + updateFrom(updated: Room): void
+        + updateAvailability(bookings: List<Booking>): void
+        + getName(): String
+        + setName(name: String): void
+        + getSlug(): String
+        + setSlug(slug: String): void
+        + getType(): String
+        + setType(type: String): void
+        + getPricePerNight(): Double
+        + setPricePerNight(pricePerNight: Double): void
+        + getCurrency(): String
+        + setCurrency(currency: String): void
+        + getRating(): Double
+        + setRating(rating: Double): void
+        + getReviewCount(): Integer
+        + setReviewCount(reviewCount: Integer): void
+        + getLocation(): String
+        + setLocation(location: String): void
+        + getMaxGuests(): Integer
+        + setMaxGuests(maxGuests: Integer): void
+        + getBeds(): String
+        + setBeds(beds: String): void
+        + getBaths(): Integer
+        + setBaths(baths: Integer): void
+        + getSizeSqFt(): Integer
+        + setSizeSqFt(sizeSqFt: Integer): void
+        + getTag(): String
+        + setTag(tag: String): void
+        + getDescription(): String
+        + setDescription(description: String): void
+        + getDetailedDescription(): String
+        + setDetailedDescription(detailedDescription: String): void
+        + getCancellationPolicy(): String
+        + setCancellationPolicy(cancellationPolicy: String): void
+        + getBedType(): String
+        + setBedType(bedType: String): void
+        + getView(): String
+        + setView(view: String): void
+        + getFeatured(): Boolean
+        + setFeatured(featured: Boolean): void
+        + getPopular(): Boolean
+        + setPopular(popular: Boolean): void
+        + getStatus(): String
+        + setStatus(status: String): void
+        + getTotalRooms(): Integer
+        + setTotalRooms(totalRooms: Integer): void
+        + getBaseRoomNumber(): Integer
+        + setBaseRoomNumber(baseRoomNumber: Integer): void
+        + getOccupiedRooms(): Integer
+        + setOccupiedRooms(occupiedRooms: Integer): void
+        + getAvailableRooms(): Integer
+        + setAvailableRooms(availableRooms: Integer): void
+        + getRoomNumbers(): List<String>
+        + setRoomNumbers(roomNumbers: List<String>): void
+        + getOccupiedRoomNumbers(): List<String>
+        + setOccupiedRoomNumbers(occupiedRoomNumbers: List<String>): void
+        + getAvailableRoomNumbers(): List<String>
+        + setAvailableRoomNumbers(availableRoomNumbers: List<String>): void
+        + getAmenities(): List<String>
+        + setAmenities(amenities: List<String>): void
+        + getImages(): List<String>
+        + setImages(images: List<String>): void
+    }
+
+    class Booking {
+        - bookingReference: String
+        - room: Room
+        - roomNumber: String
+        - userId: Long
+        - checkIn: String
+        - checkOut: String
+        - nights: Integer
+        - adults: Integer
+        - children: Integer
+        - totalGuests: Integer
+        - guestFullName: String
+        - guestEmail: String
+        - guestPhone: String
+        - guestNicPassport: String
+        - specialRequests: String
+        - paymentMethod: String
+        - subtotal: Double
+        - serviceCharge: Double
+        - taxes: Double
+        - discountAmount: Double
+        - promoCodeApplied: String
+        - totalAmount: Double
+        - currency: String
+        - status: String
+        - bookedAt: String
+        - cancellationReason: String
+        - userRating: Integer
+        - userReviewComment: String
+        + Booking()
+        + validate(): void
+        + hasActiveOccupation(): boolean
+        + calculateFinancials(reqSubtotal: Double, reqServiceCharge: Double, reqTaxes: Double, reqDiscount: Double, reqTotal: Double): void
+        + cancel(reason: String): void
+        + applyRating(rating: Integer, comment: String): void
+        + getRoomId(): String
+        + getGuestInfo(): Map<String, String>
+        + getBookingReference(): String
+        + setBookingReference(bookingReference: String): void
+        + getRoom(): Room
+        + setRoom(room: Room): void
+        + getRoomNumber(): String
+        + setRoomNumber(roomNumber: String): void
+        + getUserId(): Long
+        + setUserId(userId: Long): void
+        + getCheckIn(): String
+        + setCheckIn(checkIn: String): void
+        + getCheckOut(): String
+        + setCheckOut(checkOut: String): void
+        + getNights(): Integer
+        + setNights(nights: Integer): void
+        + getAdults(): Integer
+        + setAdults(adults: Integer): void
+        + getChildren(): Integer
+        + setChildren(children: Integer): void
+        + getTotalGuests(): Integer
+        + setTotalGuests(totalGuests: Integer): void
+        + getGuestFullName(): String
+        + setGuestFullName(guestFullName: String): void
+        + getGuestEmail(): String
+        + setGuestEmail(guestEmail: String): void
+        + getGuestPhone(): String
+        + setGuestPhone(guestPhone: String): void
+        + getGuestNicPassport(): String
+        + setGuestNicPassport(guestNicPassport: String): void
+        + getSpecialRequests(): String
+        + setSpecialRequests(specialRequests: String): void
+        + getPaymentMethod(): String
+        + setPaymentMethod(paymentMethod: String): void
+        + getSubtotal(): Double
+        + setSubtotal(subtotal: Double): void
+        + getServiceCharge(): Double
+        + setServiceCharge(serviceCharge: Double): void
+        + getTaxes(): Double
+        + setTaxes(taxes: Double): void
+        + getDiscountAmount(): Double
+        + setDiscountAmount(discountAmount: Double): void
+        + getPromoCodeApplied(): String
+        + setPromoCodeApplied(promoCodeApplied: String): void
+        + getTotalAmount(): Double
+        + setTotalAmount(totalAmount: Double): void
+        + getCurrency(): String
+        + setCurrency(currency: String): void
+        + getStatus(): String
+        + setStatus(status: String): void
+        + getBookedAt(): String
+        + setBookedAt(bookedAt: String): void
+        + getCancellationReason(): String
+        + setCancellationReason(cancellationReason: String): void
+        + getUserRating(): Integer
+        + setUserRating(userRating: Integer): void
+        + getUserReviewComment(): String
+        + setUserReviewComment(userReviewComment: String): void
+    }
+
+    class User {
+        - fullName: String
+        - email: String
+        - password: String
+        - phone: String
+        - nicPassport: String
+        - city: String
+        - country: String
+        - address: String
+        - avatarUrl: String
+        - preferredCurrency: String
+        - role: String
+        - status: String
+        - savedRoomIds: List<String>
+        - updatedAt: LocalDateTime
+        + User()
+        + User(fullName: String, email: String, password: String, phone: String, city: String, country: String, avatarUrl: String)
+        + preUpdate(): void
+        + validate(): void
+        + hasAdminRole(): boolean
+        + toggleSavedRoom(roomId: String): void
+        + getFullName(): String
+        + setFullName(fullName: String): void
+        + getEmail(): String
+        + setEmail(email: String): void
+        + getPassword(): String
+        + setPassword(password: String): void
+        + getPhone(): String
+        + setPhone(phone: String): void
+        + getNicPassport(): String
+        + setNicPassport(nicPassport: String): void
+        + getCity(): String
+        + setCity(city: String): void
+        + getCountry(): String
+        + setCountry(country: String): void
+        + getAddress(): String
+        + setAddress(address: String): void
+        + getAvatarUrl(): String
+        + setAvatarUrl(avatarUrl: String): void
+        + getPreferredCurrency(): String
+        + setPreferredCurrency(preferredCurrency: String): void
+        + getRole(): String
+        + setRole(role: String): void
+        + getStatus(): String
+        + setStatus(status: String): void
+        + getSavedRoomIds(): List<String>
+        + setSavedRoomIds(savedRoomIds: List<String>): void
+        + getUpdatedAt(): LocalDateTime
+        + setUpdatedAt(updatedAt: LocalDateTime): void
+    }
+
+    class Review {
+        - guestName: String
+        - location: String
+        - avatar: String
+        - rating: Double
+        - comment: String
+        - date: String
+        - roomBooked: String
+        - likes: Integer
+        - hearts: Integer
+        - status: String
+        - isFeatured: Boolean
+        + Review()
+        + Review(guestName: String, location: String, avatar: String, rating: Double, comment: String, date: String, roomBooked: String, likes: Integer, hearts: Integer)
+        + validate(): void
+        + adjustLikes(increment: boolean): void
+        + adjustHearts(increment: boolean): void
+        + getGuestName(): String
+        + setGuestName(guestName: String): void
+        + getLocation(): String
+        + setLocation(location: String): void
+        + getAvatar(): String
+        + setAvatar(avatar: String): void
+        + getRating(): Double
+        + setRating(rating: Double): void
+        + getComment(): String
+        + setComment(comment: String): void
+        + getDate(): String
+        + setDate(date: String): void
+        + getRoomBooked(): String
+        + setRoomBooked(roomBooked: String): void
+        + getLikes(): Integer
+        + setLikes(likes: Integer): void
+        + getHearts(): Integer
+        + setHearts(hearts: Integer): void
+        + getStatus(): String
+        + setStatus(status: String): void
+        + getIsFeatured(): Boolean
+        + setIsFeatured(isFeatured: Boolean): void
+    }
+
+    class PromoCode {
+        - code: String
+        - description: String
+        - discountType: String
+        - discountValue: Double
+        - minSpend: Double
+        - isActive: Boolean
+        + PromoCode()
+        + PromoCode(code: String, description: String, discountType: String, discountValue: Double, minSpend: Double)
+        + validate(): void
+        + calculateDiscount(subtotal: Double): double
+        + getCode(): String
+        + setCode(code: String): void
+        + getDescription(): String
+        + setDescription(description: String): void
+        + getDiscountType(): String
+        + setDiscountType(discountType: String): void
+        + getDiscountValue(): Double
+        + setDiscountValue(discountValue: Double): void
+        + getMinSpend(): Double
+        + setMinSpend(minSpend: Double): void
+        + getIsActive(): Boolean
+        + setIsActive(isActive: Boolean): void
+    }
+}
+
+' ==============================================================================
+' Package: dto (Data Transfer Objects)
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.dto" as dto {
+
+    class AuthRequest {
+        - email: String
+        - password: String
+        + AuthRequest()
+        + getEmail(): String
+        + setEmail(email: String): void
+        + getPassword(): String
+        + setPassword(password: String): void
+    }
+
+    class GuestInfoDto {
+        - fullName: String
+        - email: String
+        - phone: String
+        - nicPassport: String
+        - specialRequests: String
+        + GuestInfoDto()
+        + getFullName(): String
+        + setFullName(fullName: String): void
+        + getEmail(): String
+        + setEmail(email: String): void
+        + getPhone(): String
+        + setPhone(phone: String): void
+        + getNicPassport(): String
+        + setNicPassport(nicPassport: String): void
+        + getSpecialRequests(): String
+        + setSpecialRequests(specialRequests: String): void
+    }
+
+    class BookingRequest {
+        - roomId: String
+        - roomNumber: String
+        - userId: Long
+        - checkIn: String
+        - checkOut: String
+        - nights: Integer
+        - adults: Integer
+        - children: Integer
+        - guestInfo: GuestInfoDto
+        - paymentMethod: String
+        - subtotal: Double
+        - serviceCharge: Double
+        - taxes: Double
+        - discountAmount: Double
+        - promoCodeApplied: String
+        - totalAmount: Double
+        - currency: String
+        + BookingRequest()
+        + getRoomId(): String
+        + setRoomId(roomId: String): void
+        + getRoomNumber(): String
+        + setRoomNumber(roomNumber: String): void
+        + getUserId(): Long
+        + setUserId(userId: Long): void
+        + getCheckIn(): String
+        + setCheckIn(checkIn: String): void
+        + getCheckOut(): String
+        + setCheckOut(checkOut: String): void
+        + getNights(): Integer
+        + setNights(nights: Integer): void
+        + getAdults(): Integer
+        + setAdults(adults: Integer): void
+        + getChildren(): Integer
+        + setChildren(children: Integer): void
+        + getGuestInfo(): GuestInfoDto
+        + setGuestInfo(guestInfo: GuestInfoDto): void
+        + getPaymentMethod(): String
+        + setPaymentMethod(paymentMethod: String): void
+        + getSubtotal(): Double
+        + setSubtotal(subtotal: Double): void
+        + getServiceCharge(): Double
+        + setServiceCharge(serviceCharge: Double): void
+        + getTaxes(): Double
+        + setTaxes(taxes: Double): void
+        + getDiscountAmount(): Double
+        + setDiscountAmount(discountAmount: Double): void
+        + getPromoCodeApplied(): String
+        + setPromoCodeApplied(promoCodeApplied: String): void
+        + getTotalAmount(): Double
+        + setTotalAmount(totalAmount: Double): void
+        + getCurrency(): String
+        + setCurrency(currency: String): void
+    }
+
+    class CancelBookingRequest {
+        - reason: String
+        + CancelBookingRequest()
+        + getReason(): String
+        + setReason(reason: String): void
+    }
+
+    class RateBookingRequest {
+        - rating: Integer
+        - comment: String
+        + RateBookingRequest()
+        + getRating(): Integer
+        + setRating(rating: Integer): void
+        + getComment(): String
+        + setComment(comment: String): void
+    }
+
+    class PromoValidateRequest {
+        - code: String
+        - subtotal: Double
+        + PromoValidateRequest()
+        + getCode(): String
+        + setCode(code: String): void
+        + getSubtotal(): Double
+        + setSubtotal(subtotal: Double): void
+    }
+
+    class RegisterRequest {
+        - fullName: String
+        - email: String
+        - password: String
+        - phone: String
+        - city: String
+        - country: String
+        + RegisterRequest()
+        + getFullName(): String
+        + setFullName(fullName: String): void
+        + getEmail(): String
+        + setEmail(email: String): void
+        + getPassword(): String
+        + setPassword(password: String): void
+        + getPhone(): String
+        + setPhone(phone: String): void
+        + getCity(): String
+        + setCity(city: String): void
+        + getCountry(): String
+        + setCountry(country: String): void
+    }
+
+    class ReviewRequest {
+        - guestName: String
+        - location: String
+        - avatar: String
+        - rating: Double
+        - comment: String
+        - roomBooked: String
+        + ReviewRequest()
+        + getGuestName(): String
+        + setGuestName(guestName: String): void
+        + getLocation(): String
+        + setLocation(location: String): void
+        + getAvatar(): String
+        + setAvatar(avatar: String): void
+        + getRating(): Double
+        + setRating(rating: Double): void
+        + getComment(): String
+        + setComment(comment: String): void
+        + getRoomBooked(): String
+        + setRoomBooked(roomBooked: String): void
+    }
+
+    class UpdateProfileRequest {
+        - fullName: String
+        - email: String
+        - phone: String
+        - city: String
+        - country: String
+        - avatar: String
+        - preferredCurrency: String
+        + UpdateProfileRequest()
+        + getFullName(): String
+        + setFullName(fullName: String): void
+        + getEmail(): String
+        + setEmail(email: String): void
+        + getPhone(): String
+        + setPhone(phone: String): void
+        + getCity(): String
+        + setCity(city: String): void
+        + getCountry(): String
+        + setCountry(country: String): void
+        + getAvatar(): String
+        + setAvatar(avatar: String): void
+        + getPreferredCurrency(): String
+        + setPreferredCurrency(preferredCurrency: String): void
+    }
+}
+
+' ==============================================================================
+' Package: repository (Data Access Layer Interfaces)
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.repository" as repository {
+
+    interface BookingRepository <<interface>> {
+        + findByBookingReference(bookingReference: String): Optional<Booking>
+        + findByGuestEmailOrderByCreatedAtDesc(guestEmail: String): List<Booking>
+        + findByUserIdOrderByCreatedAtDesc(userId: Long): List<Booking>
+        + findAllByOrderByCreatedAtDesc(): List<Booking>
+        + findByRoomId(roomId: Long): List<Booking>
+        + findAll(): List<Booking>
+        + findById(id: Long): Optional<Booking>
+        + save(booking: Booking): Booking
+        + deleteById(id: Long): void
+    }
+
+    interface RoomRepository <<interface>> {
+        + findBySlug(slug: String): Optional<Room>
+        + findByType(type: String): List<Room>
+        + findByFeaturedTrue(): List<Room>
+        + searchRooms(type: String, minPrice: Double, maxPrice: Double, guests: Integer): List<Room>
+        + count(): long
+        + findAll(): List<Room>
+        + findById(id: Long): Optional<Room>
+        + save(room: Room): Room
+        + deleteById(id: Long): void
+    }
+
+    interface UserRepository <<interface>> {
+        + findByEmail(email: String): Optional<User>
+        + existsByEmail(email: String): boolean
+        + findAll(): List<User>
+        + findById(id: Long): Optional<User>
+        + save(user: User): User
+        + deleteById(id: Long): void
+    }
+
+    interface ReviewRepository <<interface>> {
+        + findByStatusOrderByCreatedAtDesc(status: String): List<Review>
+        + findAllByOrderByCreatedAtDesc(): List<Review>
+        + findAll(): List<Review>
+        + findById(id: Long): Optional<Review>
+        + save(review: Review): Review
+        + deleteById(id: Long): void
+    }
+
+    interface PromoCodeRepository <<interface>> {
+        + findByCodeIgnoreCaseAndIsActiveTrue(code: String): Optional<PromoCode>
+        + findAll(): List<PromoCode>
+        + findById(id: Long): Optional<PromoCode>
+        + save(promoCode: PromoCode): PromoCode
+        + deleteById(id: Long): void
+    }
+}
+
+' ==============================================================================
+' Package: service (Business Logic Layer)
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.service" as service {
+
+    abstract class BaseService<T> {
+        # repository: Object
+        # BaseService(repository: Object)
+        + getAll(): List<T>
+        + findById(id: Long): Optional<T>
+        + getById(id: Long): T
+        + save(entity: T): T
+        + delete(id: Long): void
+    }
+
+    class RoomService {
+        - roomRepository: RoomRepository
+        - bookingRepository: BookingRepository
+        + RoomService(roomRepository: RoomRepository, bookingRepository: BookingRepository)
+        + getAll(): List<Room>
+        + searchRooms(type: String, minPrice: Double, maxPrice: Double, guests: Integer): List<Room>
+        + getRoomByIdOrSlug(idOrSlug: String): Optional<Room>
+        + save(room: Room): Room
+        + updateRoom(id: Long, updated: Room): Room
+        + enrichSingleRoom(room: Room): Room
+        + enrichRooms(rooms: List<Room>): List<Room>
+    }
+
+    class BookingService {
+        - bookingRepository: BookingRepository
+        - roomService: RoomService
+        + BookingService(bookingRepository: BookingRepository, roomService: RoomService)
+        + createBooking(req: BookingRequest): Booking
+        + getBookingByReference(reference: String): Optional<Booking>
+        + getBookingsByGuest(email: String, userId: Long): List<Booking>
+        + cancelBooking(id: Long, reason: String): Booking
+        + rateBooking(id: Long, rating: Integer, comment: String): Booking
+        + updateStatus(id: Long, status: String): Booking
+        - generateBookingReference(): String
+    }
+
+    class UserService {
+        - userRepository: UserRepository
+        - httpClient: HttpClient
+        - imgbbApiKey: String
+        + UserService(userRepository: UserRepository)
+        + {static} hashPassword(plainPassword: String): String
+        + {static} verifyPassword(input: String, stored: String): boolean
+        + authenticate(email: String, password: String): User
+        + register(req: RegisterRequest): User
+        + updateProfile(userId: Long, req: UpdateProfileRequest): User
+        + changePassword(userId: Long, currentPassword: String, newPassword: String): User
+        + uploadAndSaveAvatar(userId: Long, base64Image: String): User
+        + removeAvatar(userId: Long): User
+        + toggleSavedRoom(userId: Long, roomId: String): User
+        + findByEmail(email: String): Optional<User>
+        + getAdmins(): List<User>
+        + createAdmin(body: Map<String, String>): User
+        + updateAdmin(id: Long, body: Map<String, String>): User
+        + deleteAdmin(id: Long): void
+        + uploadImageToImgbb(imageInput: String): String
+    }
+
+    class ReviewService {
+        - reviewRepository: ReviewRepository
+        + ReviewService(reviewRepository: ReviewRepository)
+        + getAllApprovedReviews(): List<Review>
+        + createReview(req: ReviewRequest): Review
+        + toggleLike(reviewId: Long): Review
+        + toggleLike(reviewId: Long, increment: boolean): Review
+        + toggleHeart(reviewId: Long): Review
+        + toggleHeart(reviewId: Long, increment: boolean): Review
+    }
+
+    class PromoCodeService {
+        - promoCodeRepository: PromoCodeRepository
+        + PromoCodeService(promoCodeRepository: PromoCodeRepository)
+        + validate(code: String, subtotal: Double): Map<String, Object>
+    }
+}
+
+' ==============================================================================
+' Package: controller (Presentation / REST API Layer)
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.controller" as controller {
+
+    abstract class BaseController {
+        + handleBadRequest(e: IllegalArgumentException): ResponseEntity<Map<String, String>>
+        + handleServerError(e: Exception): ResponseEntity<Map<String, String>>
+        # parseId(rawId: String): Long
+    }
+
+    class AdminController {
+        - userService: UserService
+        - roomService: RoomService
+        - bookingService: BookingService
+        - reviewService: ReviewService
+        + AdminController(userService: UserService, roomService: RoomService, bookingService: BookingService, reviewService: ReviewService)
+        + getStats(): ResponseEntity<Map<String, Object>>
+        + getAllUsers(): ResponseEntity<List<User>>
+        + getAllAdmins(): ResponseEntity<List<User>>
+        + createAdmin(body: Map<String, String>): ResponseEntity<User>
+        + updateAdmin(id: Long, body: Map<String, String>): ResponseEntity<User>
+        + deleteAdmin(id: Long): ResponseEntity<Map<String, Object>>
+    }
+
+    class AuthController {
+        - userService: UserService
+        + AuthController(userService: UserService)
+        - setCookie(response: HttpServletResponse, name: String, value: String, maxAge: int): void
+        - attachAuthCookies(response: HttpServletResponse, user: User): void
+        + login(request: AuthRequest, response: HttpServletResponse): ResponseEntity<?>
+        + register(request: RegisterRequest, response: HttpServletResponse): ResponseEntity<User>
+        + logout(response: HttpServletResponse): ResponseEntity<Map<String, String>>
+        + getProfile(id: Long, email: String): ResponseEntity<?>
+        + updateProfile(id: String, request: UpdateProfileRequest): ResponseEntity<User>
+        + uploadAvatar(id: String, body: Map<String, String>): ResponseEntity<User>
+        + removeAvatar(id: String): ResponseEntity<User>
+        + changePassword(id: String, body: Map<String, String>): ResponseEntity<Map<String, String>>
+        + toggleSavedRoom(id: String, body: Map<String, String>): ResponseEntity<User>
+    }
+
+    class BookingController {
+        - bookingService: BookingService
+        + BookingController(bookingService: BookingService)
+        + createBooking(request: BookingRequest): ResponseEntity<Booking>
+        + getBookings(email: String, userId: Long): ResponseEntity<List<Booking>>
+        + getBookingByReference(reference: String): ResponseEntity<Booking>
+        + cancelBooking(id: Long, request: CancelBookingRequest): ResponseEntity<Booking>
+        + rateBooking(id: Long, request: RateBookingRequest): ResponseEntity<Booking>
+        + updateBookingStatus(id: Long, body: Map<String, String>): ResponseEntity<Booking>
+        + deleteBooking(id: Long): ResponseEntity<Map<String, Object>>
+    }
+
+    class RoomController {
+        - roomService: RoomService
+        + RoomController(roomService: RoomService)
+        + getRooms(type: String, minPrice: Double, maxPrice: Double, guests: Integer): ResponseEntity<List<Room>>
+        + getRoomByIdOrSlug(idOrSlug: String): ResponseEntity<Room>
+        + createRoom(room: Room): ResponseEntity<Room>
+        + updateRoom(id: Long, room: Room): ResponseEntity<Room>
+        + deleteRoom(id: Long): ResponseEntity<Map<String, Object>>
+    }
+
+    class ReviewController {
+        - reviewService: ReviewService
+        + ReviewController(reviewService: ReviewService)
+        + getReviews(): ResponseEntity<List<Review>>
+        + createReview(request: ReviewRequest): ResponseEntity<Review>
+        + toggleLike(id: Long, increment: Boolean): ResponseEntity<Review>
+        + toggleHeart(id: Long, increment: Boolean): ResponseEntity<Review>
+        + deleteReview(id: Long): ResponseEntity<Map<String, Object>>
+    }
+
+    class PromoController {
+        - promoCodeService: PromoCodeService
+        + PromoController(promoCodeService: PromoCodeService)
+        + validate(request: PromoValidateRequest): ResponseEntity<Map<String, Object>>
+        + getAllPromos(): ResponseEntity<List<PromoCode>>
+        + createPromo(promoCode: PromoCode): ResponseEntity<PromoCode>
+        + deletePromo(id: Long): ResponseEntity<Map<String, Object>>
+    }
+
+    class MainController {
+        + forwardToIndex(): String
+    }
+}
+
+' ==============================================================================
+' Package: config & root application
+' ==============================================================================
+package "com.wd50.Hotel_Reservation.config" as config {
+
+    class AppReadyListener {
+        - environment: Environment
+        + AppReadyListener(environment: Environment)
+        + onApplicationReady(): void
+    }
+
+    class DataInitializer {
+        - roomRepository: RoomRepository
+        - userRepository: UserRepository
+        - reviewRepository: ReviewRepository
+        - promoCodeRepository: PromoCodeRepository
+        - bookingRepository: BookingRepository
+        + DataInitializer(roomRepository: RoomRepository, userRepository: UserRepository, reviewRepository: ReviewRepository, promoCodeRepository: PromoCodeRepository, bookingRepository: BookingRepository)
+        + run(args: String[]): void
+        - ensureRoomInventoryAndBookingNumbers(): void
+        - seedRooms(): void
+        - seedPromoCodes(): void
+        - seedUsers(): User
+        - seedReviews(): void
+        - seedBookings(user: User): void
+    }
+
+    class WebConfig {
+        + addCorsMappings(registry: CorsRegistry): void
+    }
+}
+
+class HotelReservationApplication {
+    + {static} main(args: String[]): void
+    - {static} handleStartupFailure(rootException: Exception): void
+}
+
+' ==============================================================================
+' UML RELATIONSHIPS
+' ==============================================================================
+
+' --- 1. INHERITANCE / GENERALIZATION (<|--) ---
+BaseEntity <|-- Room
+BaseEntity <|-- Booking
+BaseEntity <|-- User
+BaseEntity <|-- Review
+BaseEntity <|-- PromoCode
+
+BaseService <|-- RoomService
+BaseService <|-- BookingService
+BaseService <|-- UserService
+BaseService <|-- ReviewService
+BaseService <|-- PromoCodeService
+
+BaseController <|-- AdminController
+BaseController <|-- AuthController
+BaseController <|-- BookingController
+BaseController <|-- RoomController
+BaseController <|-- ReviewController
+BaseController <|-- PromoController
+
+' --- 2. COMPOSITION (*--) ---
+' (Whole-part relationship where the part cannot exist independently)
+BookingRequest *-- GuestInfoDto : "contains guestInfo"
+
+' --- 3. AGGREGATION (o--) ---
+' (Services aggregate their repositories and dependent services)
+RoomService o-- RoomRepository : "roomRepository"
+RoomService o-- BookingRepository : "bookingRepository"
+
+BookingService o-- BookingRepository : "bookingRepository"
+BookingService o-- RoomService : "roomService"
+
+UserService o-- UserRepository : "userRepository"
+
+ReviewService o-- ReviewRepository : "reviewRepository"
+
+PromoCodeService o-- PromoCodeRepository : "promoCodeRepository"
+
+' (Controllers aggregate their services)
+AdminController o-- UserService : "userService"
+AdminController o-- RoomService : "roomService"
+AdminController o-- BookingService : "bookingService"
+AdminController o-- ReviewService : "reviewService"
+
+AuthController o-- UserService : "userService"
+
+BookingController o-- BookingService : "bookingService"
+
+RoomController o-- RoomService : "roomService"
+
+ReviewController o-- ReviewService : "reviewService"
+
+PromoController o-- PromoCodeService : "promoCodeService"
+
+' (DataInitializer aggregates all repositories for seeding)
+DataInitializer o-- RoomRepository : "roomRepository"
+DataInitializer o-- UserRepository : "userRepository"
+DataInitializer o-- ReviewRepository : "reviewRepository"
+DataInitializer o-- PromoCodeRepository : "promoCodeRepository"
+DataInitializer o-- BookingRepository : "bookingRepository"
+
+' --- 4. ASSOCIATION (-->) ---
+' (Domain relationships between Entities)
+Booking "0..*" --> "1" Room : "room"
+Booking "0..*" ..> "0..1" User : "userId"
+
+' --- 5. DEPENDENCY (..>) ---
+' (Repository to Entity)
+BookingRepository ..> Booking : "<<manages>>"
+RoomRepository ..> Room : "<<manages>>"
+UserRepository ..> User : "<<manages>>"
+ReviewRepository ..> Review : "<<manages>>"
+PromoCodeRepository ..> PromoCode : "<<manages>>"
+
+' (Controllers depending on DTOs)
+AuthController ..> AuthRequest : "<<uses>>"
+AuthController ..> RegisterRequest : "<<uses>>"
+AuthController ..> UpdateProfileRequest : "<<uses>>"
+
+BookingController ..> BookingRequest : "<<uses>>"
+BookingController ..> CancelBookingRequest : "<<uses>>"
+BookingController ..> RateBookingRequest : "<<uses>>"
+
+PromoController ..> PromoValidateRequest : "<<uses>>"
+
+ReviewController ..> ReviewRequest : "<<uses>>"
+
+' (Services depending on DTOs)
+BookingService ..> BookingRequest : "<<processes>>"
+BookingService ..> GuestInfoDto : "<<extracts>>"
+UserService ..> RegisterRequest : "<<processes>>"
+UserService ..> UpdateProfileRequest : "<<processes>>"
+ReviewService ..> ReviewRequest : "<<processes>>"
+
+' (Main application launch triggers)
+HotelReservationApplication ..> DataInitializer : "<<initializes>>"
+HotelReservationApplication ..> AppReadyListener : "<<registers>>"
+
+@enduml
